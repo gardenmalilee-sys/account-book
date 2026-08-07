@@ -92,7 +92,7 @@ export default function AccountBook() {
   return (
     <div className="account-book">
       <header className="account-book__header">
-        <h1 className="account-book__title">나의 AI 가계부</h1>
+        <h1 className="account-book__title">나의 스마트 가계부</h1>
         <p className="account-book__subtitle">
           날짜, 금액, 내용을 기록해 지출을 정리하세요.
         </p>
