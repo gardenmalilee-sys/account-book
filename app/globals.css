@@ -1,12 +1,15 @@
 @import "tailwindcss";
 
 :root {
-  --background: #fafafa;
-  --foreground: #1d1d1f;
-  --muted: #86868b;
-  --surface: #f5f5f7;
-  --accent: #0071e3;
-  --accent-hover: #0060c2;
+  --background: #f7f7f8;
+  --foreground: #191919;
+  --muted: #8e8e93;
+  --surface: #ffffff;
+  --bubble-ai: #ffffff;
+  --bubble-user: #fee500;
+  --accent: #191919;
+  --accent-hover: #000000;
+  --line: #ebebeb;
   --font-sans: var(--font-geist-sans), "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 }
@@ -30,267 +33,273 @@ body {
   box-sizing: border-box;
 }
 
-input,
+textarea,
 button {
   font: inherit;
 }
 
 .account-book-page {
   flex: 1;
+  min-height: 100dvh;
   display: flex;
   justify-content: center;
-  padding: 80px 24px 120px;
+  padding: 0;
 }
 
-.account-book {
-  width: min(560px, 100%);
-  display: flex;
-  flex-direction: column;
-  gap: 56px;
-  animation: fade-in 480ms ease both;
-}
-
-.account-book__header {
-  text-align: left;
-}
-
-.account-book__title {
-  margin: 0;
-  font-size: clamp(2rem, 5vw, 2.75rem);
-  font-weight: 600;
-  letter-spacing: -0.045em;
-  line-height: 1.15;
-}
-
-.account-book__subtitle {
-  margin: 14px 0 0;
-  color: var(--muted);
-  font-size: 1.05rem;
-  line-height: 1.5;
-  font-weight: 400;
-}
-
-.account-book__form {
-  display: flex;
-  flex-direction: column;
-  gap: 28px;
-  animation: fade-in 560ms ease both;
-  animation-delay: 60ms;
-}
-
-.account-book__fields {
+.chat {
+  width: min(720px, 100%);
+  min-height: 100dvh;
+  max-height: 100dvh;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 28px 20px;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  background: var(--background);
 }
 
-.account-book__field {
+.chat__header {
+  padding: 18px 20px 14px;
+  background: rgba(247, 247, 248, 0.92);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.chat__title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 650;
+  letter-spacing: -0.03em;
+  text-align: center;
+}
+
+.chat__expenses {
+  padding: 14px 16px 8px;
+  border-bottom: 1px solid var(--line);
+  background: var(--background);
+}
+
+.chat__expenses-head {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+  padding: 0 4px;
 }
 
-.account-book__field--wide {
-  grid-column: 1 / -1;
-}
-
-.account-book__field span {
+.chat__expenses-head h2 {
+  margin: 0;
   font-size: 0.8125rem;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--muted);
-  letter-spacing: 0.01em;
 }
 
-.account-book__field input {
-  width: 100%;
-  border: 0;
-  border-bottom: 1px solid transparent;
-  border-radius: 0;
-  background: transparent;
-  padding: 10px 0 12px;
-  color: var(--foreground);
-  font-size: 1.0625rem;
-  outline: none;
-  box-shadow: inset 0 -1px 0 #e5e5ea;
-  transition: box-shadow 160ms ease, color 160ms ease;
+.chat__expenses-head p {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--muted);
 }
 
-.account-book__field input::placeholder {
-  color: #c7c7cc;
-}
-
-.account-book__field input:focus {
-  box-shadow: inset 0 -1.5px 0 var(--accent);
-}
-
-.account-book__amount-input {
+.chat__expenses-total {
   font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;
-  font-size: 1.25rem !important;
-  letter-spacing: -0.02em;
+  color: var(--foreground);
+  font-weight: 600;
 }
 
-.account-book__submit {
-  align-self: flex-start;
+.chat__expenses-empty {
+  margin: 0;
+  padding: 8px 4px 12px;
+  color: var(--muted);
+  font-size: 0.9375rem;
+}
+
+.chat__expense-list {
+  list-style: none;
+  margin: 0;
+  padding: 0 2px 6px;
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+.chat__expense-card {
+  flex: 0 0 auto;
+  width: min(220px, 72vw);
+  scroll-snap-align: start;
+  background: var(--surface);
+  border-radius: 16px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.chat__expense-desc {
+  margin: 0 0 6px;
+  font-size: 0.975rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.chat__expense-card time {
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+.chat__expense-amount {
+  margin: 0;
+  margin-top: auto;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+.chat__expense-amount span {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 1.125rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  color: var(--foreground);
+  margin-right: 1px;
+}
+
+.chat__messages {
+  min-height: 0;
+  overflow-y: auto;
+  padding: 18px 16px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.chat__row {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  max-width: 100%;
+  animation: rise 280ms ease both;
+}
+
+.chat__row--user {
+  justify-content: flex-end;
+}
+
+.chat__row--assistant {
+  justify-content: flex-start;
+}
+
+.chat__avatar {
+  flex: 0 0 auto;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #e9e9eb;
+  color: #555;
+  font-size: 0.68rem;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+}
+
+.chat__bubble {
+  max-width: min(78%, 420px);
+  padding: 11px 14px;
+  border-radius: 18px;
+  font-size: 0.975rem;
+  line-height: 1.45;
+  letter-spacing: -0.01em;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.chat__bubble--assistant {
+  background: var(--bubble-ai);
+  border-bottom-left-radius: 6px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.chat__bubble--user {
+  background: var(--bubble-user);
+  border-bottom-right-radius: 6px;
+  color: #191919;
+}
+
+.chat__bubble--typing {
+  color: var(--muted);
+}
+
+.chat__error {
+  margin: 0;
+  padding: 0 16px 8px;
+  color: #c0392b;
+  font-size: 0.875rem;
+}
+
+.chat__composer {
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+  padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--line);
+  background: rgba(247, 247, 248, 0.96);
+  backdrop-filter: blur(10px);
+}
+
+.chat__composer textarea {
+  flex: 1;
+  resize: none;
   border: 0;
-  border-radius: 980px;
-  padding: 12px 22px;
+  outline: none;
+  border-radius: 18px;
+  background: var(--surface);
+  padding: 12px 14px;
+  min-height: 44px;
+  max-height: 120px;
+  line-height: 1.4;
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+
+.chat__composer textarea:focus {
+  box-shadow: inset 0 0 0 1.5px #cfcfcf;
+}
+
+.chat__composer button {
+  flex: 0 0 auto;
+  border: 0;
+  border-radius: 16px;
+  min-height: 44px;
+  padding: 0 16px;
   background: var(--accent);
   color: #fff;
-  font-size: 0.9375rem;
-  font-weight: 500;
-  letter-spacing: -0.01em;
+  font-weight: 600;
   cursor: pointer;
   transition: background-color 160ms ease, opacity 160ms ease;
 }
 
-.account-book__submit:hover {
+.chat__composer button:hover:not(:disabled) {
   background: var(--accent-hover);
 }
 
-.account-book__submit:active {
-  opacity: 0.88;
-}
-
-.account-book__submit:disabled {
-  opacity: 0.45;
+.chat__composer button:disabled {
+  opacity: 0.35;
   cursor: not-allowed;
 }
 
-.account-book__error {
-  margin: -28px 0 0;
-  padding: 0;
-  color: var(--accent);
-  font-size: 0.9375rem;
-}
-
-.account-book__list {
-  animation: fade-in 640ms ease both;
-  animation-delay: 100ms;
-}
-
-.account-book__list-head {
-  display: flex;
-  flex-direction: column;
-  gap: 36px;
-  margin-bottom: 8px;
-}
-
-.account-book__list-label {
-  margin: 0 0 6px;
-  font-size: 0.8125rem;
-  font-weight: 500;
-  color: var(--muted);
-}
-
-.account-book__total {
-  margin: 0;
-  display: flex;
-  align-items: baseline;
-  gap: 4px;
-}
-
-.account-book__total-value {
-  font-family: var(--font-mono);
-  font-variant-numeric: tabular-nums;
-  font-size: clamp(2.4rem, 8vw, 3.25rem);
-  font-weight: 500;
-  letter-spacing: -0.05em;
-  line-height: 1;
-  color: var(--foreground);
-}
-
-.account-book__total-unit {
-  font-size: 1.125rem;
-  font-weight: 500;
-  color: var(--muted);
-}
-
-.account-book__list-title {
-  margin: 0;
-  font-size: 0.8125rem;
-  font-weight: 500;
-  color: var(--muted);
-  letter-spacing: 0.01em;
-}
-
-.account-book__empty {
-  margin: 28px 0 0;
-  padding: 0;
-  color: var(--muted);
-  font-size: 1rem;
-}
-
-.account-book__cards {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-}
-
-.account-book__card {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 24px;
-  margin: 0 -12px;
-  padding: 22px 12px;
-  border-radius: 10px;
-  transition: background-color 160ms ease;
-}
-
-.account-book__card:hover {
-  background-color: rgba(0, 0, 0, 0.04);
-}
-
-.account-book__card + .account-book__card {
-  box-shadow: inset 0 1px 0 #ececef;
-}
-
-.account-book__card-meta {
-  min-width: 0;
-}
-
-.account-book__item-content {
-  margin: 0 0 6px;
-  font-size: 1.0625rem;
-  font-weight: 500;
-  letter-spacing: -0.02em;
-  line-height: 1.35;
-}
-
-.account-book__card time {
-  color: var(--muted);
-  font-size: 0.875rem;
-}
-
-.account-book__item-amount {
-  margin: 0;
-  display: flex;
-  align-items: baseline;
-  gap: 2px;
-  white-space: nowrap;
-}
-
-.account-book__item-amount-value {
-  font-family: var(--font-mono);
-  font-variant-numeric: tabular-nums;
-  font-size: 1.25rem;
-  font-weight: 500;
-  letter-spacing: -0.03em;
-  color: var(--foreground);
-}
-
-.account-book__item-amount-unit {
-  font-size: 0.875rem;
-  color: var(--muted);
-}
-
-@keyframes fade-in {
+@keyframes rise {
   from {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translateY(6px);
   }
   to {
     opacity: 1;
@@ -299,108 +308,51 @@ button {
 }
 
 @media (max-width: 640px) {
-  .account-book-page {
-    width: 100%;
-    padding: 48px 20px 80px;
-    padding-left: max(20px, env(safe-area-inset-left));
-    padding-right: max(20px, env(safe-area-inset-right));
-    padding-bottom: max(80px, env(safe-area-inset-bottom));
+  .chat__header {
+    padding: 16px 16px 12px;
   }
 
-  .account-book {
-    width: 100%;
-    max-width: 100%;
-    gap: 48px;
-  }
-
-  .account-book__title {
-    font-size: clamp(2.1rem, 9vw, 2.6rem);
-  }
-
-  .account-book__subtitle {
-    font-size: 1.125rem;
-  }
-
-  .account-book__form {
-    gap: 32px;
-  }
-
-  .account-book__fields {
-    grid-template-columns: 1fr;
-    gap: 28px;
-  }
-
-  .account-book__field span {
-    font-size: 0.9375rem;
-  }
-
-  .account-book__field input {
-    min-height: 48px;
-    font-size: 1.125rem;
-    padding: 12px 0 14px;
-  }
-
-  .account-book__amount-input {
-    font-size: 1.375rem !important;
-  }
-
-  .account-book__submit {
-    width: 100%;
-    min-height: 52px;
-    font-size: 1.0625rem;
-    border-radius: 12px;
-  }
-
-  .account-book__list-head {
-    gap: 32px;
-  }
-
-  .account-book__total-value {
-    font-size: clamp(2.6rem, 12vw, 3.4rem);
-  }
-
-  .account-book__total-unit {
+  .chat__title {
     font-size: 1.2rem;
   }
 
-  .account-book__list-title,
-  .account-book__list-label {
-    font-size: 0.9375rem;
+  .chat__expenses-head h2,
+  .chat__expenses-head p {
+    font-size: 0.875rem;
   }
 
-  .account-book__empty {
-    font-size: 1.0625rem;
+  .chat__expense-card {
+    width: min(200px, 78vw);
+    padding: 14px;
   }
 
-  .account-book__card {
-    padding: 24px 12px;
-    gap: 16px;
+  .chat__expense-desc {
+    font-size: 1.02rem;
   }
 
-  .account-book__item-content {
-    font-size: 1.125rem;
+  .chat__expense-amount span {
+    font-size: 1.2rem;
   }
 
-  .account-book__card time {
-    font-size: 1rem;
+  .chat__bubble {
+    max-width: 82%;
+    font-size: 1.05rem;
+    padding: 12px 15px;
   }
 
-  .account-book__item-amount-value {
-    font-size: 1.35rem;
+  .chat__composer {
+    padding: 12px 12px calc(12px + env(safe-area-inset-bottom));
+    gap: 8px;
   }
 
-  .account-book__item-amount-unit {
-    font-size: 0.95rem;
-  }
-}
-
-@media (max-width: 380px) {
-  .account-book__card {
-    flex-direction: column;
-    align-items: flex-start;
+  .chat__composer textarea {
+    min-height: 48px;
+    font-size: 1.05rem;
   }
 
-  .account-book__item-amount {
-    align-self: flex-end;
+  .chat__composer button {
+    min-height: 48px;
+    min-width: 64px;
+    font-size: 1.02rem;
   }
 }
