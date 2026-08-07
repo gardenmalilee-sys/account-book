@@ -1,26 +1,406 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #fafafa;
+  --foreground: #1d1d1f;
+  --muted: #86868b;
+  --surface: #f5f5f7;
+  --accent: #0071e3;
+  --accent-hover: #0060c2;
+  --font-sans: var(--font-geist-sans), "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-sans: var(--font-sans);
 }
 
 body {
-  background: var(--background);
+  margin: 0;
+  min-height: 100%;
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  background: var(--background);
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+input,
+button {
+  font: inherit;
+}
+
+.account-book-page {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  padding: 80px 24px 120px;
+}
+
+.account-book {
+  width: min(560px, 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 56px;
+  animation: fade-in 480ms ease both;
+}
+
+.account-book__header {
+  text-align: left;
+}
+
+.account-book__title {
+  margin: 0;
+  font-size: clamp(2rem, 5vw, 2.75rem);
+  font-weight: 600;
+  letter-spacing: -0.045em;
+  line-height: 1.15;
+}
+
+.account-book__subtitle {
+  margin: 14px 0 0;
+  color: var(--muted);
+  font-size: 1.05rem;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+.account-book__form {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  animation: fade-in 560ms ease both;
+  animation-delay: 60ms;
+}
+
+.account-book__fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px 20px;
+}
+
+.account-book__field {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.account-book__field--wide {
+  grid-column: 1 / -1;
+}
+
+.account-book__field span {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--muted);
+  letter-spacing: 0.01em;
+}
+
+.account-book__field input {
+  width: 100%;
+  border: 0;
+  border-bottom: 1px solid transparent;
+  border-radius: 0;
+  background: transparent;
+  padding: 10px 0 12px;
+  color: var(--foreground);
+  font-size: 1.0625rem;
+  outline: none;
+  box-shadow: inset 0 -1px 0 #e5e5ea;
+  transition: box-shadow 160ms ease, color 160ms ease;
+}
+
+.account-book__field input::placeholder {
+  color: #c7c7cc;
+}
+
+.account-book__field input:focus {
+  box-shadow: inset 0 -1.5px 0 var(--accent);
+}
+
+.account-book__amount-input {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 1.25rem !important;
+  letter-spacing: -0.02em;
+}
+
+.account-book__submit {
+  align-self: flex-start;
+  border: 0;
+  border-radius: 980px;
+  padding: 12px 22px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  transition: background-color 160ms ease, opacity 160ms ease;
+}
+
+.account-book__submit:hover {
+  background: var(--accent-hover);
+}
+
+.account-book__submit:active {
+  opacity: 0.88;
+}
+
+.account-book__submit:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.account-book__error {
+  margin: -28px 0 0;
+  padding: 0;
+  color: var(--accent);
+  font-size: 0.9375rem;
+}
+
+.account-book__list {
+  animation: fade-in 640ms ease both;
+  animation-delay: 100ms;
+}
+
+.account-book__list-head {
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+  margin-bottom: 8px;
+}
+
+.account-book__list-label {
+  margin: 0 0 6px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.account-book__total {
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.account-book__total-value {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: clamp(2.4rem, 8vw, 3.25rem);
+  font-weight: 500;
+  letter-spacing: -0.05em;
+  line-height: 1;
+  color: var(--foreground);
+}
+
+.account-book__total-unit {
+  font-size: 1.125rem;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.account-book__list-title {
+  margin: 0;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--muted);
+  letter-spacing: 0.01em;
+}
+
+.account-book__empty {
+  margin: 28px 0 0;
+  padding: 0;
+  color: var(--muted);
+  font-size: 1rem;
+}
+
+.account-book__cards {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.account-book__card {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 24px;
+  margin: 0 -12px;
+  padding: 22px 12px;
+  border-radius: 10px;
+  transition: background-color 160ms ease;
+}
+
+.account-book__card:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.account-book__card + .account-book__card {
+  box-shadow: inset 0 1px 0 #ececef;
+}
+
+.account-book__card-meta {
+  min-width: 0;
+}
+
+.account-book__item-content {
+  margin: 0 0 6px;
+  font-size: 1.0625rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.35;
+}
+
+.account-book__card time {
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.account-book__item-amount {
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+  white-space: nowrap;
+}
+
+.account-book__item-amount-value {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 1.25rem;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  color: var(--foreground);
+}
+
+.account-book__item-amount-unit {
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 640px) {
+  .account-book-page {
+    width: 100%;
+    padding: 48px 20px 80px;
+    padding-left: max(20px, env(safe-area-inset-left));
+    padding-right: max(20px, env(safe-area-inset-right));
+    padding-bottom: max(80px, env(safe-area-inset-bottom));
+  }
+
+  .account-book {
+    width: 100%;
+    max-width: 100%;
+    gap: 48px;
+  }
+
+  .account-book__title {
+    font-size: clamp(2.1rem, 9vw, 2.6rem);
+  }
+
+  .account-book__subtitle {
+    font-size: 1.125rem;
+  }
+
+  .account-book__form {
+    gap: 32px;
+  }
+
+  .account-book__fields {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .account-book__field span {
+    font-size: 0.9375rem;
+  }
+
+  .account-book__field input {
+    min-height: 48px;
+    font-size: 1.125rem;
+    padding: 12px 0 14px;
+  }
+
+  .account-book__amount-input {
+    font-size: 1.375rem !important;
+  }
+
+  .account-book__submit {
+    width: 100%;
+    min-height: 52px;
+    font-size: 1.0625rem;
+    border-radius: 12px;
+  }
+
+  .account-book__list-head {
+    gap: 32px;
+  }
+
+  .account-book__total-value {
+    font-size: clamp(2.6rem, 12vw, 3.4rem);
+  }
+
+  .account-book__total-unit {
+    font-size: 1.2rem;
+  }
+
+  .account-book__list-title,
+  .account-book__list-label {
+    font-size: 0.9375rem;
+  }
+
+  .account-book__empty {
+    font-size: 1.0625rem;
+  }
+
+  .account-book__card {
+    padding: 24px 12px;
+    gap: 16px;
+  }
+
+  .account-book__item-content {
+    font-size: 1.125rem;
+  }
+
+  .account-book__card time {
+    font-size: 1rem;
+  }
+
+  .account-book__item-amount-value {
+    font-size: 1.35rem;
+  }
+
+  .account-book__item-amount-unit {
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .account-book__card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .account-book__item-amount {
+    align-self: flex-end;
+  }
 }
